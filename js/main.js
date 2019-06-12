@@ -40,8 +40,8 @@ var getObjectsArray = function (numberOfLocations) {
   }
   return objectsArray;
 };
-var objects = getObjectsArray(NUMBER_OF_LOCATIONS);
-var addNewPins = function (array) {
+var pinsData = getObjectsArray(NUMBER_OF_LOCATIONS);
+var getPinsFragment = function (array) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
     var newPin = templatePin.cloneNode(true);
@@ -54,5 +54,5 @@ var addNewPins = function (array) {
   }
   return fragment;
 };
-var listOfNewPins = addNewPins(objects);
-map.appendChild(listOfNewPins);
+var pinsFragment = getPinsFragment(pinsData);
+map.appendChild(pinsFragment);

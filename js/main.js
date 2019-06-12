@@ -41,16 +41,20 @@ var getObjectsArray = function (numberOfLocations) {
   return objectsArray;
 };
 var pinsData = getObjectsArray(NUMBER_OF_LOCATIONS);
+var getNewPin = function (currentData) {
+  var newPin = templatePin.cloneNode(true);
+  newPin.style.left = (currentData.location.x + WIDTH_OF_PIN / 2) + 'px';
+  newPin.style.top = (currentData.location.y - HEIGHT_OF_PIN) + 'px';
+  var pinImg = newPin.querySelector('img');
+  pinImg.alt = currentData.offer;
+  pinImg.src = currentData.author;
+  return newPin;
+};
 var getPinsFragment = function (array) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
-    var newPin = templatePin.cloneNode(true);
-    newPin.style.left = (array[i].location.x + WIDTH_OF_PIN / 2) + 'px';
-    newPin.style.top = (array[i].location.y - HEIGHT_OF_PIN) + 'px';
-    var pinImg = newPin.querySelector('img');
-    pinImg.alt = array[i].offer;
-    pinImg.src = array[i].author;
-    fragment.appendChild(newPin);
+    var readyPin = getNewPin(array[i]);
+    fragment.appendChild(readyPin);
   }
   return fragment;
 };

@@ -1,12 +1,15 @@
 'use strict';
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 var screenWidth = document.documentElement.clientWidth;
 var NUMBER_OF_LOCATIONS = 8;
 var types = ['palace', 'flat', 'house', 'bungalo'];
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 var WIDTH_OF_PIN = 50;
 var HEIGHT_OF_PIN = 70;
+var HEIGHT_OF_START_PIN = 84;
+var WIDTH_OF_START_PIN = 62;
+var MAP_HEIGHT = 704;
+
 var getRandomNumber = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
@@ -58,5 +61,59 @@ var getPinsFragment = function (array) {
   }
   return fragment;
 };
-var pinsFragment = getPinsFragment(pinsData);
-map.appendChild(pinsFragment);
+
+var startPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var filtersForm = document.querySelector('.map__filters');
+
+var adFormFieldsetList = adForm.querySelectorAll('fieldset');
+
+var addDisableAttr = function (list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].disabled = true;
+  }
+};
+
+addDisableAttr(adFormFieldsetList);
+var filtersFormChildrenList = filtersForm.querySelectorAll('fieldset, select');
+addDisableAttr(filtersFormChildrenList);
+
+var deleteDisableAttr = function (list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].disabled = false;
+  }
+};
+
+var pinClickHandler = function () {
+  map.classList.remove('map--faded');
+  var pinsFragment = getPinsFragment(pinsData);
+  map.appendChild(pinsFragment);
+  adForm.classList.remove('ad-form--disabled');
+  deleteDisableAttr(adFormFieldsetList);
+  deleteDisableAttr(filtersFormChildrenList);
+  resetFormButton.addEventListener('click', formClearHandler);
+  startPin.removeEventListener('click', pinClickHandler);
+};
+
+startPin.addEventListener('click', pinClickHandler);
+var adressInput = adForm.querySelector('[name="address"]');
+adressInput.value = (screenWidth / 2 - WIDTH_OF_START_PIN / 2).toString() + ' , ' + (MAP_HEIGHT / 2 - HEIGHT_OF_START_PIN / 2).toString();
+var resetFormButton = adForm.querySelector('.ad-form__reset');
+var formClearHandler = function () {
+  map.classList.add('map--faded');
+  clearPins();
+  adForm.classList.add('ad-form--disabled');
+  addDisableAttr(adFormFieldsetList);
+  addDisableAttr(filtersFormChildrenList);
+  resetFormButton.removeEventListener('click', formClearHandler);
+  startPin.addEventListener('click', pinClickHandler);
+};
+
+var clearPins = function () {
+  var pins = document.querySelectorAll('.map__pin');
+  for (var i = 1; i < pins.length; i++) {
+    pins[i].remove();
+  }
+};
+
+

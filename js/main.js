@@ -74,16 +74,7 @@ var addDisableAttr = function (list) {
     list[i].disabled = true;
   }
 };
-/* стоит ли функции findChildren и addDisableAttr объединить в одну?
-var addDisableAttr = function(parent,selectors) {
-  var childList = parent.querySelectorAll(selectors);
-  for(var i=0;i<childList.length;i++){
-    childList[i].disabled=true;
-  }
-};
-addDisableAttr(adForm,'fieldset');
-addDisableAttr(filtersForm,'fieldset, select')
-*/
+
 addDisableAttr(adFormFieldsetList);
 var filtersFormChildrenList = findChildren(filtersForm, 'fieldset, select');
 addDisableAttr(filtersFormChildrenList);
@@ -98,6 +89,7 @@ var pinOpenMapHandler = function () {
   adForm.classList.remove('ad-form--disabled');
   deleteDisableAttr(adFormFieldsetList);
   deleteDisableAttr(filtersFormChildrenList);
+  resetFormButton.addEventListener('click', formClearHandler);
   startPin.removeEventListener('click', pinOpenMapHandler);
 };
 
@@ -114,5 +106,26 @@ var getCoordinatesOfPin = function (mapWidth, mapHeight, pinWidth, pinHeight) {
   return coordinates;
 };
 var сoordinatesOfStartPin = getCoordinatesOfPin(screenWidth, MAP_WIDTH, WIDTH_OF_START_PIN, HEIGHT_OF_START_PIN);
-var adressInput = adForm.querySelector('[name="address"]');
-adressInput.value = сoordinatesOfStartPin.x.toString() + ',' + сoordinatesOfStartPin.y.toString();
+
+var fillAdressInput = function (parent, child) {
+  var adressInput = parent.querySelector(child);
+  adressInput.value = сoordinatesOfStartPin.x.toString() + ',' + сoordinatesOfStartPin.y.toString();
+};
+
+fillAdressInput(adForm, '[name="address"]');
+var resetFormButton = adForm.querySelector('.ad-form__reset');
+var formClearHandler = function () {
+  map.classList.add('map--faded');
+  clearPins();
+  adForm.classList.add('ad-form--disabled');
+  addDisableAttr(adFormFieldsetList);
+  addDisableAttr(filtersFormChildrenList);
+  startPin.addEventListener('click', pinOpenMapHandler);
+  resetFormButton.removeEventListener('click', formClearHandler);
+};
+var clearPins = function () {
+  var pins = document.querySelectorAll('.map__pin');
+  for (var i = 1; i < pins.length; i++) {
+    pins[i].remove();
+  }
+};

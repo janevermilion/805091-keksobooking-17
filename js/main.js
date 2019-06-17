@@ -1,6 +1,5 @@
 'use strict';
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 var screenWidth = document.documentElement.clientWidth;
 var NUMBER_OF_LOCATIONS = 8;
 var types = ['palace', 'flat', 'house', 'bungalo'];
@@ -59,4 +58,61 @@ var getPinsFragment = function (array) {
   return fragment;
 };
 var pinsFragment = getPinsFragment(pinsData);
-map.appendChild(pinsFragment);
+
+var startPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var filtersForm = document.querySelector('.map__filters');
+
+var findChildren = function (parent, selectors) {
+  var childList = parent.querySelectorAll(selectors);
+  return childList;
+};
+var adFormFieldsetList = findChildren(adForm, 'fieldset');
+
+var addDisableAttr = function (list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].disabled = true;
+  }
+};
+/* стоит ли функции findChildren и addDisableAttr объединить в одну?
+var addDisableAttr = function(parent,selectors) {
+  var childList = parent.querySelectorAll(selectors);
+  for(var i=0;i<childList.length;i++){
+    childList[i].disabled=true;
+  }
+};
+addDisableAttr(adForm,'fieldset');
+addDisableAttr(filtersForm,'fieldset, select')
+*/
+addDisableAttr(adFormFieldsetList);
+var filtersFormChildrenList = findChildren(filtersForm, 'fieldset, select');
+addDisableAttr(filtersFormChildrenList);
+var deleteDisableAttr = function (list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].disabled = false;
+  }
+};
+var pinOpenMapHandler = function () {
+  map.classList.remove('map--faded');
+  map.appendChild(pinsFragment);
+  adForm.classList.remove('ad-form--disabled');
+  deleteDisableAttr(adFormFieldsetList);
+  deleteDisableAttr(filtersFormChildrenList);
+  startPin.removeEventListener('click', pinOpenMapHandler);
+};
+
+startPin.addEventListener('click', pinOpenMapHandler);
+
+var HEIGHT_OF_START_PIN = 84;
+var WIDTH_OF_START_PIN = 62;
+var MAP_WIDTH = 704;
+
+var getCoordinatesOfPin = function (mapWidth, mapHeight, pinWidth, pinHeight) {
+  var coordinates = {};
+  coordinates.x = mapWidth / 2 - pinWidth / 2;
+  coordinates.y = mapHeight / 2 - pinHeight / 2;
+  return coordinates;
+};
+var сoordinatesOfStartPin = getCoordinatesOfPin(screenWidth, MAP_WIDTH, WIDTH_OF_START_PIN, HEIGHT_OF_START_PIN);
+var adressInput = adForm.querySelector('[name="address"]');
+adressInput.value = сoordinatesOfStartPin.x.toString() + ',' + сoordinatesOfStartPin.y.toString();

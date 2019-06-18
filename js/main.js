@@ -125,31 +125,22 @@ var clearPins = function () {
 
 var typeOfHouse = adForm.querySelector('#type');
 var priceForNight = adForm.querySelector('#price');
-var checkInTime= adForm.querySelector('#timein');
+var checkInTime = adForm.querySelector('#timein');
 var checkOutTime = adForm.querySelector('#timeout');
 var typeOfHouseSelectHandler = function () {
-var index = typeOfHouse.selectedIndex;
-if (typeOfHouse[index].selected === true) {
-      priceForNight.placeholder = MIN_PRICES[index];
-      priceForNight.min = MIN_PRICES[index];
-    }
+  var index = typeOfHouse.selectedIndex;
+  if (typeOfHouse[index].selected === true) {
+    priceForNight.placeholder = MIN_PRICES[index];
+    priceForNight.min = MIN_PRICES[index];
+  }
 
 };
 
 var checkInSelectHandler = function () {
-
-    /*if(checkInTime[checkInTime.selectedIndex].selected === true) {
-      checkOutTime[checkInTime.selectedIndex].selected = true;
-    }*/
-checkInTime.selectedIndex = checkOutTime.selectedIndex;
-checkInTime.value= checkOutTime.value
-  };
+  checkOutTime.value = checkInTime.value;
+};
 var checkOutSelectHandler = function () {
- /* if (checkOutTime[checkOutTime.selectedIndex].selected === true){
-      checkInTime[checkOutTime.selectedIndex].selected = true;
-    }*/
-    checkOutTime.selectedIndex = checkInTime.selectedIndex;
-    checkOutTime.value = checkInTime.value;
-}
+  checkInTime.value = checkOutTime.value;
+};
 
 

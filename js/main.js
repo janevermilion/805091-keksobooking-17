@@ -131,6 +131,7 @@ var changePlaceholder = function () {
   for (var i = 0; i < typeOfHouse.length; i++) {
     if (typeOfHouse[i].selected === true) {
       priceForNight.placeholder = minPrices[i];
+      priceForNight.min = minPrices[i];
     }
   }
 };

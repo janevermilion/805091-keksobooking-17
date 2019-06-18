@@ -1,6 +1,6 @@
 'use strict';
 var map = document.querySelector('.map');
-var screenWidth = document.documentElement.clientWidth;
+var screenWidth = 1200;
 var NUMBER_OF_LOCATIONS = 8;
 var types = ['bungalo', 'flat', 'house', 'palace'];
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -9,7 +9,7 @@ var HEIGHT_OF_PIN = 70;
 var HEIGHT_OF_START_PIN = 84;
 var WIDTH_OF_START_PIN = 62;
 var MAP_HEIGHT = 704;
-
+var MIN_PRICES = ['0', '1000', '5000', '10000'];
 var getRandomNumber = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
@@ -46,7 +46,7 @@ var getObjectsArray = function (numberOfLocations) {
 var pinsData = getObjectsArray(NUMBER_OF_LOCATIONS);
 var getNewPin = function (currentData) {
   var newPin = templatePin.cloneNode(true);
-  newPin.style.left = (currentData.location.x + WIDTH_OF_PIN / 2) + 'px';
+  newPin.style.left = (currentData.location.x - WIDTH_OF_PIN) + 'px';
   newPin.style.top = (currentData.location.y - HEIGHT_OF_PIN) + 'px';
   var pinImg = newPin.querySelector('img');
   pinImg.alt = currentData.offer;
@@ -92,8 +92,9 @@ var pinClickHandler = function () {
   deleteDisableAttr(adFormFieldsetList);
   deleteDisableAttr(filtersFormChildrenList);
   resetFormButton.addEventListener('click', formClearHandler);
-  typeOfHouse.addEventListener('change', changePlaceholder);
-  checkInTime.addEventListener('change', setTimeOfCheckOut);
+  typeOfHouse.addEventListener('change', typeOfHouseSelectHandler);
+  checkInTime.addEventListener('change', checkInSelectHandler);
+  checkOutTime.addEventListener('change', checkOutSelectHandler);
   startPin.removeEventListener('click', pinClickHandler);
 };
 
@@ -108,8 +109,9 @@ var formClearHandler = function () {
   addDisableAttr(adFormFieldsetList);
   addDisableAttr(filtersFormChildrenList);
   resetFormButton.removeEventListener('click', formClearHandler);
-  typeOfHouse.removeEventListener('change', changePlaceholder);
-  checkInTime.removeEventListener('change', setTimeOfCheckOut);
+  typeOfHouse.removeEventListener('change', typeOfHouseSelectHandler);
+  checkInTime.removeEventListener('change', checkInSelectHandler);
+  checkOutTime.removeEventListener('change', checkOutSelectHandler);
   startPin.addEventListener('click', pinClickHandler);
 
 };
@@ -123,25 +125,31 @@ var clearPins = function () {
 
 var typeOfHouse = adForm.querySelector('#type');
 var priceForNight = adForm.querySelector('#price');
-
-var minPrices = ['0', '1000', '5000', '10000'];
-var checkInTime = adForm.querySelector('#timein');
+var checkInTime= adForm.querySelector('#timein');
 var checkOutTime = adForm.querySelector('#timeout');
-var changePlaceholder = function () {
-  for (var i = 0; i < typeOfHouse.length; i++) {
-    if (typeOfHouse[i].selected === true) {
-      priceForNight.placeholder = minPrices[i];
-      priceForNight.min = minPrices[i];
+var typeOfHouseSelectHandler = function () {
+var index = typeOfHouse.selectedIndex;
+if (typeOfHouse[index].selected === true) {
+      priceForNight.placeholder = MIN_PRICES[index];
+      priceForNight.min = MIN_PRICES[index];
     }
-  }
+
 };
 
-var setTimeOfCheckOut = function () {
-  for (var i = 0; i < checkInTime.length; i++) {
-    if (checkInTime[i].selected === true) {
-      checkOutTime[i].selected = true;
-    }
-  }
-};
+var checkInSelectHandler = function () {
+
+    /*if(checkInTime[checkInTime.selectedIndex].selected === true) {
+      checkOutTime[checkInTime.selectedIndex].selected = true;
+    }*/
+checkInTime.selectedIndex = checkOutTime.selectedIndex;
+checkInTime.value= checkOutTime.value
+  };
+var checkOutSelectHandler = function () {
+ /* if (checkOutTime[checkOutTime.selectedIndex].selected === true){
+      checkInTime[checkOutTime.selectedIndex].selected = true;
+    }*/
+    checkOutTime.selectedIndex = checkInTime.selectedIndex;
+    checkOutTime.value = checkInTime.value;
+}
 
 

@@ -3,7 +3,6 @@ var MAP_WIDTH = 1200;
 var NUMBER_OF_LOCATIONS = 8;
 var WIDTH_OF_PIN = 50;
 var HEIGHT_OF_PIN = 70;
-var MAP_HEIGHT = 704;
 var MIN_PRICES = ['0', '1000', '5000', '10000'];
 var HOUSING_TYPES = ['bungalo', 'flat', 'house', 'palace'];
 var map = document.querySelector('.map__pins');
@@ -89,7 +88,7 @@ var formClearHandler = function () {
   checkInTime.removeEventListener('change', checkInSelectHandler);
   checkOutTime.removeEventListener('change', checkOutSelectHandler);
   mainPin.style.left = 570 + 'px';
-  mainPin.style.top = 375 + 'px;'
+  mainPin.style.top = 375 + 'px';
 };
 var clearPins = function () {
   var pins = document.querySelectorAll('.map__pin');
@@ -112,17 +111,15 @@ var checkInSelectHandler = function () {
 var checkOutSelectHandler = function () {
   checkInTime.value = checkOutTime.value;
 };
-var mainPinMousedownHandler = function () {
-}
+
 mainPin.addEventListener('mousedown', function (drugEvt) {
-  //var mainPinMousedownHandler = function(drugEvt) {
   drugEvt.preventDefault();
   var startCoords = {
     x: drugEvt.clientX,
     y: drugEvt.clientY
   };
   var mainPinMousemoveHandler = function (moveEvt) {
-    var MAIN_PIN_RADIUS = 130;
+    var mainPinRadius = 100;
     moveEvt.preventDefault();
     mainPin.draggable = true;
     var shift = {
@@ -133,15 +130,11 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
-    if ((mainPin.offsetTop - shift.y) > MAIN_PIN_RADIUS && (mainPin.offsetTop - shift.y) < 650) {
+    if ((mainPin.offsetTop - shift.y) > 130 && (mainPin.offsetTop - shift.y) < 630) {
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-    } else {
-      mainPin.style.top = MAIN_PIN_RADIUS
-    };
-    if ((mainPin.offsetLeft - shift.x) > MAIN_PIN_RADIUS && (mainPin.offsetLeft - shift.x) < (MAP_WIDTH - 130)) {
+    }
+    if ((mainPin.offsetLeft - shift.x) > mainPinRadius / 2 && (mainPin.offsetLeft - shift.x) < (MAP_WIDTH - mainPinRadius)) {
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-    } else {
-      mainPin.style.left = MAIN_PIN_RADIUS;
     }
   };
   var mainPinMouseupHander = function (upEvt) {

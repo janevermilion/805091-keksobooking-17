@@ -6,8 +6,8 @@ var WIDTH_OF_PIN = 50;
 var WIDTH_OF_START_PIN = 62;
 var HEIGHT_OF_START_PIN = 84;
 var HEIGHT_OF_PIN = 70;
-var topBorderOfMap = 130;
-var bottomBorderOfMap = 630;
+var TOP_BORDER_OF_MAP = 130;
+var BOTTOM_BORDER_OF_MAP = 630;
 var MIN_PRICES = ['0', '1000', '5000', '10000'];
 var HOUSING_TYPES = ['bungalo', 'flat', 'house', 'palace'];
 var map = document.querySelector('.map');
@@ -39,7 +39,7 @@ var createObject = function (avatar, type, x, y) {
 var getObjectsArray = function (numberOfLocations) {
   var objectsArray = [];
   for (var i = 0; i < numberOfLocations; i++) {
-    var newObject = createObject(adresses[i], HOUSING_TYPES[getRandomNumber(0, HOUSING_TYPES.length - 1)], getRandomNumber(0, MAP_WIDTH), getRandomNumber(topBorderOfMap, bottomBorderOfMap));
+    var newObject = createObject(adresses[i], HOUSING_TYPES[getRandomNumber(0, HOUSING_TYPES.length - 1)], getRandomNumber(0, MAP_WIDTH), getRandomNumber(TOP_BORDER_OF_MAP, BOTTOM_BORDER_OF_MAP));
     objectsArray.push(newObject);
   }
   return objectsArray;
@@ -117,15 +117,16 @@ var checkInSelectHandler = function () {
 var checkOutSelectHandler = function () {
   checkInTime.value = checkOutTime.value;
 };
-
 mainPin.addEventListener('mousedown', function (drugEvt) {
   drugEvt.preventDefault();
+  var isMapActive = false;
   var startCoords = {
     x: drugEvt.clientX,
     y: drugEvt.clientY
   };
   var mainPinMousemoveHandler = function (moveEvt) {
     moveEvt.preventDefault();
+
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
@@ -140,7 +141,7 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
       y: mainPin.offsetTop - shift.y
     };
 
-    if (newCoords.y > topBorderOfMap && newCoords.y < bottomBorderOfMap) {
+    if (newCoords.y > TOP_BORDER_OF_MAP - HEIGHT_OF_START_PIN / 2 && newCoords.y < BOTTOM_BORDER_OF_MAP) {
       mainPin.style.top = newCoords.y + 'px';
     }
     if (newCoords.x > 0 && newCoords.x < (MAP_WIDTH - WIDTH_OF_START_PIN)) {
@@ -149,10 +150,15 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
   };
   var mainPinMouseupHander = function (upEvt) {
     upEvt.preventDefault();
-    adressInput.value = (mainPin.offsetLeft - WIDTH_OF_START_PIN / 2) + ',' + mainPin.offsetTop;
-    map.classList.remove('map--faded');
-    var pinsFragment = getPinsFragment(pinsData);
-    map.appendChild(pinsFragment);
+    adressInput.value = (mainPin.offsetLeft + WIDTH_OF_START_PIN / 2) + ',' + mainPin.offsetTop;
+
+    if (!isMapActive) {
+      map.classList.remove('map--faded');
+      var pinsFragment = getPinsFragment(pinsData);
+      map.appendChild(pinsFragment);
+      isMapActive = true;
+    }
+
     adForm.classList.remove('ad-form--disabled');
     deleteDisableAttr(adFormFieldsetList);
     deleteDisableAttr(filtersFormChildrenList);
@@ -163,6 +169,10 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
     document.removeEventListener('mousemove', mainPinMousemoveHandler);
     document.removeEventListener('mouseup', mainPinMouseupHander);
   };
+
   document.addEventListener('mousemove', mainPinMousemoveHandler);
   document.addEventListener('mouseup', mainPinMouseupHander);
+
 });
+
+

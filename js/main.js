@@ -119,7 +119,13 @@ var checkOutSelectHandler = function () {
 };
 mainPin.addEventListener('mousedown', function (drugEvt) {
   drugEvt.preventDefault();
-  var isMapActive = false;
+
+  if (map.classList.contains('map--faded')) {
+    isMapActive = false;
+  } else {
+    var isMapActive = true;
+  }
+
   var startCoords = {
     x: drugEvt.clientX,
     y: drugEvt.clientY

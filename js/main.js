@@ -1,11 +1,14 @@
 'use strict';
 var MAP_WIDTH = 1200;
+var MAP_HEIGHT = 704;
 var NUMBER_OF_LOCATIONS = 8;
 var WIDTH_OF_PIN = 50;
+var WIDTH_OF_START_PIN = 62;
+var HEIGHT_OF_START_PIN = 84;
 var HEIGHT_OF_PIN = 70;
 var MIN_PRICES = ['0', '1000', '5000', '10000'];
 var HOUSING_TYPES = ['bungalo', 'flat', 'house', 'palace'];
-var map = document.querySelector('.map__pins');
+var map = document.querySelector('.map');
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 var getRandomNumber = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -49,10 +52,10 @@ var getNewPin = function (currentData) {
   pinImg.src = currentData.author;
   return newPin;
 };
-var getPinsFragment = function (array) {
+var getPinsFragment = function (data) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < array.length; i++) {
-    var readyPin = getNewPin(array[i]);
+  for (var i = 0; i < data.length; i++) {
+    var readyPin = getNewPin(data[i]);
     fragment.appendChild(readyPin);
   }
   return fragment;
@@ -75,7 +78,7 @@ var deleteDisableAttr = function (list) {
   }
 };
 var adressInput = adForm.querySelector('[name="address"]');
-// adressInput.value = (MAP_WIDTH / 2 - WIDTH_OF_START_PIN / 2).toString() + ' , ' + (MAP_HEIGHT / 2 - HEIGHT_OF_START_PIN / 2).toString();
+adressInput.value = (MAP_WIDTH / 2 - WIDTH_OF_START_PIN / 2) + ',' + (MAP_HEIGHT / 2 - HEIGHT_OF_START_PIN / 2);
 var resetFormButton = adForm.querySelector('.ad-form__reset');
 var formClearHandler = function () {
   map.classList.add('map--faded');
@@ -83,12 +86,13 @@ var formClearHandler = function () {
   adForm.classList.add('ad-form--disabled');
   addDisableAttr(adFormFieldsetList);
   addDisableAttr(filtersFormChildrenList);
-  resetFormButton.removeEventListener('click', formClearHandler);
   typeOfHouse.removeEventListener('change', typeOfHouseSelectHandler);
   checkInTime.removeEventListener('change', checkInSelectHandler);
   checkOutTime.removeEventListener('change', checkOutSelectHandler);
-  mainPin.style.left = 570 + 'px';
-  mainPin.style.top = 375 + 'px';
+  mainPin.style.left = (MAP_WIDTH / 2 - WIDTH_OF_START_PIN / 2) + 'px';
+  mainPin.style.top = (MAP_HEIGHT / 2 + HEIGHT_OF_START_PIN / 2) + 'px';
+  adForm.reset();
+  resetFormButton.removeEventListener('click', formClearHandler);
 };
 var clearPins = function () {
   var pins = document.querySelectorAll('.map__pin');
@@ -119,7 +123,6 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
     y: drugEvt.clientY
   };
   var mainPinMousemoveHandler = function (moveEvt) {
-    var mainPinRadius = 100;
     moveEvt.preventDefault();
     mainPin.draggable = true;
     var shift = {
@@ -133,13 +136,13 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
     if ((mainPin.offsetTop - shift.y) > 130 && (mainPin.offsetTop - shift.y) < 630) {
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     }
-    if ((mainPin.offsetLeft - shift.x) > mainPinRadius / 2 && (mainPin.offsetLeft - shift.x) < (MAP_WIDTH - mainPinRadius)) {
+    if ((mainPin.offsetLeft - shift.x) > 0 && (mainPin.offsetLeft - shift.x) < (MAP_WIDTH - WIDTH_OF_START_PIN)) {
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
     }
   };
   var mainPinMouseupHander = function (upEvt) {
     upEvt.preventDefault();
-    adressInput.value = mainPin.offsetLeft + ',' + mainPin.offsetTop;
+    adressInput.value = (mainPin.offsetLeft - WIDTH_OF_START_PIN / 2) + ',' + mainPin.offsetTop;
     map.classList.remove('map--faded');
     var pinsFragment = getPinsFragment(pinsData);
     map.appendChild(pinsFragment);

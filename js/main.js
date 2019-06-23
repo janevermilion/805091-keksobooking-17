@@ -6,6 +6,8 @@ var WIDTH_OF_PIN = 50;
 var WIDTH_OF_START_PIN = 62;
 var HEIGHT_OF_START_PIN = 84;
 var HEIGHT_OF_PIN = 70;
+var topBorderOfMap = 130;
+var bottomBorderOfMap = 630;
 var MIN_PRICES = ['0', '1000', '5000', '10000'];
 var HOUSING_TYPES = ['bungalo', 'flat', 'house', 'palace'];
 var map = document.querySelector('.map');
@@ -37,7 +39,7 @@ var createObject = function (avatar, type, x, y) {
 var getObjectsArray = function (numberOfLocations) {
   var objectsArray = [];
   for (var i = 0; i < numberOfLocations; i++) {
-    var newObject = createObject(adresses[i], HOUSING_TYPES[getRandomNumber(0, HOUSING_TYPES.length - 1)], getRandomNumber(0, MAP_WIDTH), getRandomNumber(130, 630));
+    var newObject = createObject(adresses[i], HOUSING_TYPES[getRandomNumber(0, HOUSING_TYPES.length - 1)], getRandomNumber(0, MAP_WIDTH), getRandomNumber(topBorderOfMap, bottomBorderOfMap));
     objectsArray.push(newObject);
   }
   return objectsArray;
@@ -124,7 +126,6 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
   };
   var mainPinMousemoveHandler = function (moveEvt) {
     moveEvt.preventDefault();
-    mainPin.draggable = true;
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
@@ -133,11 +134,17 @@ mainPin.addEventListener('mousedown', function (drugEvt) {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
-    if ((mainPin.offsetTop - shift.y) > 130 && (mainPin.offsetTop - shift.y) < 630) {
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+
+    var newCoords = {
+      x: mainPin.offsetLeft - shift.x,
+      y: mainPin.offsetTop - shift.y
+    };
+
+    if (newCoords.y > topBorderOfMap && newCoords.y < bottomBorderOfMap) {
+      mainPin.style.top = newCoords.y + 'px';
     }
-    if ((mainPin.offsetLeft - shift.x) > 0 && (mainPin.offsetLeft - shift.x) < (MAP_WIDTH - WIDTH_OF_START_PIN)) {
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    if (newCoords.x > 0 && newCoords.x < (MAP_WIDTH - WIDTH_OF_START_PIN)) {
+      mainPin.style.left = newCoords.x + 'px';
     }
   };
   var mainPinMouseupHander = function (upEvt) {

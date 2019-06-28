@@ -71,4 +71,9 @@
     }
   };
 
+    adForm.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      window.formListeners.hide();
+      window.backend.uploadData(new FormData(adForm));
+})
 })();

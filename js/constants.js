@@ -12,6 +12,11 @@
     TOP_BORDER_OF_MAP: 130,
     BOTTOM_BORDER_OF_MAP: 630,
     MIN_PRICES: ['0', '1000', '5000', '10000'],
-    HOUSING_TYPES: ['bungalo', 'flat', 'house', 'palace']
+    HOUSING_TYPES: ['bungalo', 'flat', 'house', 'palace'],
+    ESC_KEYCODE: 27,
+    ENTER_KEYCODE: 13,
+    URL_GET: 'https://js.dump.academy/keksobooking/data',
+    URL_POST: 'https://js.dump.academy/keksobooking',
+    TIMEOUT: 10000
   };
 })();

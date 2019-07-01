@@ -13,23 +13,19 @@
     return newPin;
   };
 
-  var getPinsFragment = function (data) {
+  window.getPinsFragment = function (data) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < data.length; i++) {
       var readyPin = getNewPin(data[i]);
       fragment.appendChild(readyPin);
-
     }
     return fragment;
   };
 
-  window.loadHandlers = {
-    success: function (arr) {
+  window.loadHandlers =  function (arr) {
       var map = document.querySelector('.map');
       map.appendChild(getPinsFragment(arr));
-    },
-    error: function () {
-      window.createPopup.error();
     }
-  };
+
 })();
+

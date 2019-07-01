@@ -44,6 +44,8 @@
   var checkOutSelectHandler = function () {
     checkInTime.value = checkOutTime.value;
   };
+  //
+  var housingTypeFilter = document.querySelector('#housing-type');
   window.formListeners = {
     hide: function () {
       map.classList.add('map--faded');
@@ -68,6 +70,9 @@
       typeOfHouse.addEventListener('change', typeOfHouseSelectHandler);
       checkInTime.addEventListener('change', checkInSelectHandler);
       checkOutTime.addEventListener('change', checkOutSelectHandler);
+      //
+
+      housingTypeFilter.addEventListener('change', window.housingTypeFiltertHandler);
     }
   };
 

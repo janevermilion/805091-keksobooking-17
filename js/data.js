@@ -22,9 +22,12 @@
     return fragment;
   };
 
-  window.loadHandlers =  function (arr) {
+  window.loadHandler =  function (arr) {
+      window.pinsData = Array.from(arr);
+      console.log(window.pinsData)
       var map = document.querySelector('.map');
-      map.appendChild(getPinsFragment(arr));
+      map.appendChild(window.getPinsFragment(arr));
+
     }
 
 })();

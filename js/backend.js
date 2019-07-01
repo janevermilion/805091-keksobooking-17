@@ -27,7 +27,7 @@
 
   window.backend = {
     getData: function (onLoad) {
-      loadXhr(window.loadHandlers, window.formListeners.show);
+      loadXhr(window.loadHandler, window.formListeners.show);
       window.xhr.open('GET', window.constants.URL_GET);
       window.xhr.send();
     },

@@ -18,6 +18,7 @@
     URL_GET: 'https://js.dump.academy/keksobooking/data',
     URL_POST: 'https://js.dump.academy/keksobooking',
     TIMEOUT: 10000,
-    DEBOUNCE_INTERVAL: 10000
+    DEBOUNCE_INTERVAL: 500,
+    NUMBER_OF_PINS_ON_MAP: 5
   };
 })();

@@ -8,7 +8,6 @@
   var adFormFieldsetList = adForm.querySelectorAll('fieldset');
   var adressInput = adForm.querySelector('[name="address"]');
   var resetFormButton = adForm.querySelector('.ad-form__reset');
-  var housingTypeFilter = document.querySelector('#housing-type');
   adressInput.value = (window.constants.MAP_WIDTH / 2 - window.constants.WIDTH_OF_START_PIN / 2) + ',' + (window.constants.MAP_HEIGHT / 2 - window.constants.HEIGHT_OF_START_PIN / 2);
   var addDisableAttr = function (list) {
     for (var i = 0; i < list.length; i++) {
@@ -65,7 +64,6 @@
       typeOfHouse.addEventListener('change', typeOfHouseSelectHandler);
       checkInTime.addEventListener('change', checkInSelectHandler);
       checkOutTime.addEventListener('change', checkOutSelectHandler);
-      housingTypeFilter.addEventListener('change', window.housingTypeFiltertHandler);
     }
   };
 

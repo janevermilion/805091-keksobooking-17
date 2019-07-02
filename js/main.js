@@ -48,7 +48,7 @@
 
       if (!isMapActive) {
         map.classList.remove('map--faded');
-        window.backend.getData(window.loadHandlers);
+        window.backend.getData(window.pinsActions.render);
         isMapActive = true;
       }
       window.formListeners.show();

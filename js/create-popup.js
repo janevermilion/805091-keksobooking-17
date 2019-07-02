@@ -1,8 +1,8 @@
 'use strict';
 
- (function () {
+(function () {
 
-   window.createPopup = {
+  window.createPopup = {
     success: function () {
       var template = document.querySelector('#success').content;
       var newPopup = template.cloneNode(true);
@@ -14,22 +14,22 @@
           main.removeChild(addedPopup);
         }
 
-         main.removeChild(addedPopup);
+        main.removeChild(addedPopup);
 
-         document.removeEventListener('click', closePopupHandler);
+        document.removeEventListener('click', closePopupHandler);
         document.removeEventListener('keydown', closePopupHandler);
       };
 
-       document.addEventListener('click', closePopupHandler);
+      document.addEventListener('click', closePopupHandler);
       document.addEventListener('keydown', closePopupHandler);
 
-     },
+    },
     error: function () {
       var template = document.querySelector('#error').content;
       var newPopup = template.cloneNode(true);
       var main = document.querySelector('main');
 
-       main.appendChild(newPopup);
+      main.appendChild(newPopup);
       var closeButton = document.querySelector('.error__button');
       closeButton.addEventListener('click', closePopupHandler);
       var closePopupHandler = function (evt) {
@@ -38,15 +38,15 @@
           main.removeChild(addedPopup);
         }
 
-         main.removeChild(addedPopup);
+        main.removeChild(addedPopup);
 
-         document.removeEventListener('click', closePopupHandler);
+        document.removeEventListener('click', closePopupHandler);
         document.removeEventListener('keydown', closePopupHandler);
       };
 
-       document.addEventListener('click', closePopupHandler);
+      document.addEventListener('click', closePopupHandler);
       document.addEventListener('keydown', closePopupHandler);
 
-     }
+    }
   };
 })();

@@ -2,42 +2,40 @@
 (function () {
 
 
-  var loadXhr = function (onLoad, onError) {
-    window.xhr = new XMLHttpRequest();
-    window.xhr.responseType = 'json';
+  var loadXhr = function (onSuccess, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
 
-    window.xhr.addEventListener('load', function () {
-      if (window.xhr.status === 200) {
-        onLoad(window.xhr.response);
+    xhr.addEventListener('load', function () {
+      if (xhr.status === 200) {
+        onSuccess(xhr.response);
       } else {
-        onError('Статус ответа: ' + window.xhr.status + ' ' + window.xhr.statusText);
+        onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
-    window.xhr.addEventListener('error', function () {
+    xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
-    window.xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + window.xhr.timeout + 'мс');
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    window.xhr.timeout = window.constants.TIMEOUT;
-
+    xhr.timeout = window.constants.TIMEOUT;
+    return xhr;
   };
-
 
   window.backend = {
-    getData: function (onLoad) {
-      loadXhr(window.loadHandler, window.formListeners.show);
-      window.xhr.open('GET', window.constants.URL_GET);
-      window.xhr.send();
+    getData: function (callback) {
+      var xhr = loadXhr(callback, window.formListeners.show);
+      xhr.open('GET', window.constants.URL_GET);
+      xhr.send();
     },
     uploadData: function (data) {
-      loadXhr(window.createPopup.success, window.createPopup.error);
-      window.xhr.open('POST', window.constants.URL_POST);
-      window.xhr.send(data);
+      var xhr = loadXhr(window.createPopup.success, window.createPopup.error);
+      xhr.open('POST', window.constants.URL_POST);
+      xhr.send(data);
     }
   };
-
 
 })();
 

@@ -8,6 +8,7 @@
   var adFormFieldsetList = adForm.querySelectorAll('fieldset');
   var adressInput = adForm.querySelector('[name="address"]');
   var resetFormButton = adForm.querySelector('.ad-form__reset');
+  var housingTypeFilter = document.querySelector('#housing-type');
   adressInput.value = (window.constants.MAP_WIDTH / 2 - window.constants.WIDTH_OF_START_PIN / 2) + ',' + (window.constants.MAP_HEIGHT / 2 - window.constants.HEIGHT_OF_START_PIN / 2);
   var addDisableAttr = function (list) {
     for (var i = 0; i < list.length; i++) {
@@ -23,12 +24,6 @@
     }
   };
 
-  var clearPins = function () {
-    var pins = document.querySelectorAll('.map__pin');
-    for (var i = 1; i < pins.length; i++) {
-      pins[i].remove();
-    }
-  };
   var typeOfHouse = adForm.querySelector('#type');
   var priceForNight = adForm.querySelector('#price');
   var checkInTime = adForm.querySelector('#timein');
@@ -44,12 +39,12 @@
   var checkOutSelectHandler = function () {
     checkInTime.value = checkOutTime.value;
   };
-  //
-  var housingTypeFilter = document.querySelector('#housing-type');
+
+
   window.formListeners = {
     hide: function () {
       map.classList.add('map--faded');
-      clearPins();
+      window.pinsActions.clear();
       adForm.classList.add('ad-form--disabled');
       addDisableAttr(adFormFieldsetList);
       addDisableAttr(filtersFormChildrenList);
@@ -70,15 +65,13 @@
       typeOfHouse.addEventListener('change', typeOfHouseSelectHandler);
       checkInTime.addEventListener('change', checkInSelectHandler);
       checkOutTime.addEventListener('change', checkOutSelectHandler);
-      //
-
       housingTypeFilter.addEventListener('change', window.housingTypeFiltertHandler);
     }
   };
 
-    adForm.addEventListener('submit', function (evt) {
-      evt.preventDefault();
-      window.backend.uploadData(new FormData(adForm));
-      window.formListeners.hide();
-})
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.uploadData(new FormData(adForm));
+    window.formListeners.hide();
+  });
 })();

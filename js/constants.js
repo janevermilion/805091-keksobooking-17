@@ -17,6 +17,7 @@
     ENTER_KEYCODE: 13,
     URL_GET: 'https://js.dump.academy/keksobooking/data',
     URL_POST: 'https://js.dump.academy/keksobooking',
-    TIMEOUT: 10000
+    TIMEOUT: 10000,
+    DEBOUNCE_INTERVAL: 10000
   };
 })();

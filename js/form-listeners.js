@@ -69,7 +69,7 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.uploadData(new FormData(adForm));
+    window.backend.uploadData(window.createPopup.success, window.createPopup.error, new FormData(adForm));
     window.formListeners.hide();
   });
 })();

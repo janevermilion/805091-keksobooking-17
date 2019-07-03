@@ -2,51 +2,51 @@
 
 (function () {
 
-  window.createPopup = {
-    success: function () {
-      var template = document.querySelector('#success').content;
+  var createPopups = function(typeOfPopup) {
+    var template = document.querySelector('#' + typeOfPopup).content;
       var newPopup = template.cloneNode(true);
       var main = document.querySelector('main');
       main.appendChild(newPopup);
-      var closePopupHandler = function (evt) {
-        var addedPopup = main.querySelector('.success');
+      var addedPopup = main.querySelector('.' + typeOfPopup);
+
+      var clickClosePopupHandler = function () {
+        main.removeChild(addedPopup);
+
+        document.removeEventListener('click', clickClosePopupHandler);
+        document.removeEventListener('keydown', keydownClosePopupHandler);
+      };
+
+      var keydownClosePopupHandler = function(evt) {
         if (evt.keyCode === window.constants.ESC_KEYCODE) {
           main.removeChild(addedPopup);
         }
+      }
 
-        main.removeChild(addedPopup);
+      document.addEventListener('click', clickClosePopupHandler);
+      document.addEventListener('keydown', keydownClosePopupHandler);
 
-        document.removeEventListener('click', closePopupHandler);
-        document.removeEventListener('keydown', closePopupHandler);
-      };
-
-      document.addEventListener('click', closePopupHandler);
-      document.addEventListener('keydown', closePopupHandler);
-
-    },
-    error: function () {
-      var template = document.querySelector('#error').content;
-      var newPopup = template.cloneNode(true);
-      var main = document.querySelector('main');
-
-      main.appendChild(newPopup);
-      var closeButton = document.querySelector('.error__button');
-      closeButton.addEventListener('click', closePopupHandler);
-      var closePopupHandler = function (evt) {
-        var addedPopup = main.querySelector('.error');
-        if (evt.keyCode === window.constants.ESC_KEYCODE) {
+      if(typeOfPopup==='error') {
+        var closeButton = document.querySelector('.error__button');
+        var closeButtonPopupClosenHandler = function() {
           main.removeChild(addedPopup);
+          closeButton.removeEventListener('click',closeButtonPopupClosenHandler);
+          document.removeEventListener('click', clickClosePopupHandler);
+          document.removeEventListener('keydown', keydownClosePopupHandler);
         }
-
-        main.removeChild(addedPopup);
-
-        document.removeEventListener('click', closePopupHandler);
-        document.removeEventListener('keydown', closePopupHandler);
-      };
-
-      document.addEventListener('click', closePopupHandler);
-      document.addEventListener('keydown', closePopupHandler);
+        closeButton.addEventListener('click',closeButtonPopupClosenHandler);
+      }
 
     }
-  };
+
+
+  window.createPopup = {
+    success: function() {
+      createPopups('success')
+    },
+    error: function() {
+      createPopups('error')
+    }
+
+  }
+
 })();

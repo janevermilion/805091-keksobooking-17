@@ -4,12 +4,12 @@
 
   housingTypeFilter.addEventListener('change', function () {
     window.debounce(function () {
-      window.backend.getData(window.updatePins);
+      window.updatePins(window.pinsData);
     });
   });
 
   window.updatePins = function (data) {
-    window.pinsActions.getPinsData(data);
+    //window.pinsActions.getPinsData();
     var pinsData = data;
 
     window.pinsActions.clear();

@@ -2,7 +2,7 @@
 (function () {
 
 
-  var loadXhr = function (onSuccess, onError) {
+  var getXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -25,17 +25,16 @@
   };
 
   window.backend = {
-    getData: function (callback) {
-      var xhr = loadXhr(callback, window.formListeners.show);
+    getData: function (callbackSuccess, callbackError) {
+      var xhr = getXhr(callbackSuccess, callbackError);
       xhr.open('GET', window.constants.URL_GET);
       xhr.send();
     },
-    uploadData: function (data) {
-      var xhr = loadXhr(window.createPopup.success, window.createPopup.error);
+    uploadData: function (callbackSuccess, callbackError,data) {
+      var xhr = getXhr(callbackSuccess, callbackError);
       xhr.open('POST', window.constants.URL_POST);
       xhr.send(data);
     }
   };
 
 })();
-

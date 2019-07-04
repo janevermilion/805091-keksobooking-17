@@ -23,12 +23,6 @@
     }
   };
 
-  var clearPins = function () {
-    var pins = document.querySelectorAll('.map__pin');
-    for (var i = 1; i < pins.length; i++) {
-      pins[i].remove();
-    }
-  };
   var typeOfHouse = adForm.querySelector('#type');
   var priceForNight = adForm.querySelector('#price');
   var checkInTime = adForm.querySelector('#timein');
@@ -44,10 +38,12 @@
   var checkOutSelectHandler = function () {
     checkInTime.value = checkOutTime.value;
   };
+
+
   window.formListeners = {
     hide: function () {
       map.classList.add('map--faded');
-      clearPins();
+      window.pinsActions.clear();
       adForm.classList.add('ad-form--disabled');
       addDisableAttr(adFormFieldsetList);
       addDisableAttr(filtersFormChildrenList);
@@ -71,4 +67,9 @@
     }
   };
 
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.uploadData(window.createPopup.success, window.createPopup.error, new FormData(adForm));
+    window.formListeners.hide();
+  });
 })();

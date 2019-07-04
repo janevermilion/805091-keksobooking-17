@@ -48,7 +48,14 @@
 
       if (!isMapActive) {
         map.classList.remove('map--faded');
-        map.appendChild(window.pinsFragment);
+        window.backend.getData(function (dataArray) {
+          window.pinsActions.setData(dataArray);
+          window.pinsActions.render(dataArray);
+        },
+        function () {
+          window.createPopup.error();
+          window.formListeners.show();
+        });
         isMapActive = true;
       }
       window.formListeners.show();

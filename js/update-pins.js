@@ -4,22 +4,20 @@
 
   housingTypeFilter.addEventListener('change', function () {
     window.debounce(function () {
-      window.updatePins(window.pinsData);
+      window.updatePins();
     });
   });
 
-  window.updatePins = function (data) {
-    //window.pinsActions.getPinsData();
-    var pinsData = data;
+  window.updatePins = function () {
 
     window.pinsActions.clear();
 
     var filteredHouses = window.pinsData.filter(function (it) {
+      if (housingTypeFilter.value === 'any') {
+        return it;
+      }
       return it.offer.type === housingTypeFilter.value;
     });
-    if (housingTypeFilter.value === 'any') {
-      filteredHouses = pinsData;
-    }
 
     window.pinsActions.render(filteredHouses);
 

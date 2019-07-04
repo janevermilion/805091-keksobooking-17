@@ -6,25 +6,24 @@
 
   window.pinsActions = {
 
-    getPinsData: function (arr) {
-      window.pinsData = arr;
+    setData: function (array) {
+      window.pinsData = array;
     },
 
-    render: function (arr) {
-      if (arr.length > window.constants.NUMBER_OF_PINS_ON_MAP) {
-        arr.splice(window.constants.NUMBER_OF_PINS_ON_MAP, arr.length);
-      }
+    render: function (array) {
       var map = document.querySelector('.map');
-      map.appendChild(window.getPinsFragment(arr));
-
+      if (array.length > window.constants.NUMBER_OF_PINS_ON_MAP) {
+        var slicedArray = array.slice(0, window.constants.NUMBER_OF_PINS_ON_MAP);
+        map.appendChild(window.getPinsFragment(slicedArray));
+      } else {
+        map.appendChild(window.getPinsFragment(array));
+      }
     },
     clear: function () {
-      var pins = document.querySelectorAll('.map__pin');
-      for (var i = 1; i < pins.length; i++) {
-        pins[i].remove();
-      }
+      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      pins.forEach(function (element) {
+        element.remove();
+      });
     }};
 
 })();
-
-

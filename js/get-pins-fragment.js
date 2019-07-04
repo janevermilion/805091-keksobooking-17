@@ -13,12 +13,13 @@
     return newPin;
   };
 
+
   window.getPinsFragment = function (data) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < data.length; i++) {
-      var readyPin = getNewPin(data[i]);
+    data.forEach(function (element) {
+      var readyPin = getNewPin(element);
       fragment.appendChild(readyPin);
-    }
+    });
     return fragment;
   };
 

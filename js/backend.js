@@ -30,7 +30,7 @@
       xhr.open('GET', window.constants.URL_GET);
       xhr.send();
     },
-    uploadData: function (callbackSuccess, callbackError,data) {
+    uploadData: function (callbackSuccess, callbackError, data) {
       var xhr = getXhr(callbackSuccess, callbackError);
       xhr.open('POST', window.constants.URL_POST);
       xhr.send(data);

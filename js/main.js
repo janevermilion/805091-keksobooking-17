@@ -61,6 +61,7 @@
       window.formListeners.show();
       document.removeEventListener('mousemove', mainPinMousemoveHandler);
       document.removeEventListener('mouseup', mainPinMouseupHander);
+      map.addEventListener('click', window.mapCreatePopupHandler);
     };
 
     document.addEventListener('mousemove', mainPinMousemoveHandler);

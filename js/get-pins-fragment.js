@@ -18,9 +18,7 @@
     var fragment = document.createDocumentFragment();
     data.forEach(function (element) {
       var readyPin = getNewPin(element);
-      var readyPopup = window.createNewListingPopup(element);
       fragment.appendChild(readyPin);
-      fragment.appendChild(readyPopup);// не забыть чтобы он вставлялся перед
     });
     return fragment;
   };

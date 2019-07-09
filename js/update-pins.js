@@ -15,7 +15,7 @@
     if (housingTypeFilter.value === 'any') {
       filteredHouses = window.pinsData;
     } else {
-        filteredHouses = window.pinsData.filter(function (it) {
+      filteredHouses = window.pinsData.filter(function (it) {
         return it.offer.type === housingTypeFilter.value;
       });
     }

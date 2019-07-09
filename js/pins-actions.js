@@ -4,6 +4,7 @@
 
 (function () {
 
+
   window.pinsActions = {
 
     setData: function (data) {
@@ -20,6 +21,7 @@
       pins.forEach(function (element) {
         element.remove();
       });
-    }};
+    }
+  };
 
 })();

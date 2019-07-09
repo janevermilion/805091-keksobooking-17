@@ -1,39 +1,39 @@
 'use strict';
 
 (function () {
-
+  var main = document.querySelector('main');
   var createPopups = function (typeOfPopup) {
     var template = document.querySelector('#' + typeOfPopup).content;
     var newPopup = template.cloneNode(true);
-    var main = document.querySelector('main');
+
     main.appendChild(newPopup);
     var addedPopup = main.querySelector('.' + typeOfPopup);
 
-    var clickClosePopupHandler = function () {
+    var popupClickHandler = function () {
       main.removeChild(addedPopup);
 
-      document.removeEventListener('click', clickClosePopupHandler);
-      document.removeEventListener('keydown', keydownClosePopupHandler);
+      document.removeEventListener('click', popupClickHandler);
+      document.removeEventListener('keydown', popupKeydownHandler);
     };
 
-    var keydownClosePopupHandler = function (evt) {
+    var popupKeydownHandler = function (evt) {
       if (evt.keyCode === window.constants.ESC_KEYCODE) {
         main.removeChild(addedPopup);
       }
     };
 
-    document.addEventListener('click', clickClosePopupHandler);
-    document.addEventListener('keydown', keydownClosePopupHandler);
+    document.addEventListener('click', popupClickHandler);
+    document.addEventListener('keydown', popupKeydownHandler);
 
     if (typeOfPopup === 'error') {
       var closeButton = document.querySelector('.error__button');
-      var closeButtonPopupClosenHandler = function () {
+      var buttonClosePopupHandler = function () {
         main.removeChild(addedPopup);
-        closeButton.removeEventListener('click', closeButtonPopupClosenHandler);
-        document.removeEventListener('click', clickClosePopupHandler);
-        document.removeEventListener('keydown', keydownClosePopupHandler);
+        closeButton.removeEventListener('click', buttonClosePopupHandler);
+        document.removeEventListener('click', popupClickHandler);
+        document.removeEventListener('keydown', popupKeydownHandler);
       };
-      closeButton.addEventListener('click', closeButtonPopupClosenHandler);
+      closeButton.addEventListener('click', buttonClosePopupHandler);
     }
 
   };

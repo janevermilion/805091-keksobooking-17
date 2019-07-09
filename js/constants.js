@@ -19,6 +19,30 @@
     URL_POST: 'https://js.dump.academy/keksobooking',
     TIMEOUT: 10000,
     DEBOUNCE_INTERVAL: 500,
-    NUMBER_OF_PINS_ON_MAP: 5
+    NUMBER_OF_PINS_ON_MAP: 5,
+    AccomodationType: [
+      {
+        'type': 'bungalo',
+        'russian': 'Бунгало',
+        'minPrice': 0
+      },
+      {
+        'type': 'flat',
+        'russian': 'Квартира',
+        'minPrice': 1000
+      },
+      {
+        'type': 'house',
+        'russian': 'Дом',
+        'minPrice': 5000
+      },
+      {
+        'type': 'palace',
+        'russian': 'Дворец',
+        'minPrice': 10000
+      }
+    ]
   };
 })();
+
+

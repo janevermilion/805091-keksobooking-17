@@ -11,13 +11,14 @@
   window.updatePins = function () {
 
     window.pinsActions.clear();
-
-    var filteredHouses = window.pinsData.filter(function (it) {
-      if (housingTypeFilter.value === 'any') {
-        return it;
-      }
-      return it.offer.type === housingTypeFilter.value;
-    });
+    var filteredHouses;
+    if (housingTypeFilter.value === 'any') {
+      filteredHouses = window.pinsData;
+    } else {
+      filteredHouses = window.pinsData.filter(function (it) {
+        return it.offer.type === housingTypeFilter.value;
+      });
+    }
 
     window.pinsActions.render(filteredHouses);
 

@@ -8,6 +8,8 @@
   var adFormFieldsetList = adForm.querySelectorAll('fieldset');
   var adressInput = adForm.querySelector('[name="address"]');
   var resetFormButton = adForm.querySelector('.ad-form__reset');
+
+
   adressInput.value = (window.constants.MAP_WIDTH / 2 - window.constants.WIDTH_OF_START_PIN / 2) + ',' + (window.constants.MAP_HEIGHT / 2 - window.constants.HEIGHT_OF_START_PIN / 2);
   var addDisableAttr = function (list) {
     for (var i = 0; i < list.length; i++) {
@@ -27,6 +29,10 @@
   var priceForNight = adForm.querySelector('#price');
   var checkInTime = adForm.querySelector('#timein');
   var checkOutTime = adForm.querySelector('#timeout');
+  var roomNumber = adForm.querySelector('#room_number');
+  var guestsCapacity = adForm.querySelector('#capacity');
+
+
   var typeOfHouseSelectHandler = function () {
     var index = typeOfHouse.selectedIndex;
     priceForNight.placeholder = window.constants.MIN_PRICES[index];
@@ -40,6 +46,39 @@
   };
 
 
+  var validateRoom = function (roomSelect, guestSelect) {
+    var guestSelectArr = Array.from(guestSelect);
+    var lastValue = roomSelect.length - 1;
+
+    guestSelectArr.forEach(function (numberOfGuests) {
+      numberOfGuests.disabled = true;
+    });
+
+    guestSelectArr.forEach(function (numberOfGuests) {
+      if (roomSelect.value > lastValue) {
+        guestSelect[lastValue].disabled = false;
+        return;
+      }
+
+      if (roomSelect.value === numberOfGuests.value) {
+        for (var i = 0; i < lastValue; i++) {
+          if (guestSelect[i].value <= numberOfGuests.value) {
+            guestSelect[i].disabled = false;
+          }
+        }
+        return;
+      }
+    });
+  };
+
+  var roomNumberChangeHandler = function () {
+    validateRoom(roomNumber, guestsCapacity);
+  };
+
+  var guestsCapacityChangeHandler = function () {
+    validateRoom(roomNumber, guestsCapacity);
+  };
+
   window.formListeners = {
     hide: function () {
       map.classList.add('map--faded');
@@ -50,6 +89,8 @@
       typeOfHouse.removeEventListener('change', typeOfHouseSelectHandler);
       checkInTime.removeEventListener('change', checkInSelectHandler);
       checkOutTime.removeEventListener('change', checkOutSelectHandler);
+      roomNumber.removeEventListener('change', roomNumberChangeHandler);
+      guestsCapacity.removeEventListener('change', guestsCapacityChangeHandler);
       mainPin.style.left = (window.constants.MAP_WIDTH / 2 - window.constants.WIDTH_OF_START_PIN / 2) + 'px';
       mainPin.style.top = (window.constants.MAP_HEIGHT / 2 + window.constants.HEIGHT_OF_START_PIN / 2) + 'px';
       adForm.reset();
@@ -64,6 +105,8 @@
       typeOfHouse.addEventListener('change', typeOfHouseSelectHandler);
       checkInTime.addEventListener('change', checkInSelectHandler);
       checkOutTime.addEventListener('change', checkOutSelectHandler);
+      roomNumber.addEventListener('change', roomNumberChangeHandler);
+      guestsCapacity.addEventListener('change', guestsCapacityChangeHandler);
     }
   };
 

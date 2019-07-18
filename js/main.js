@@ -5,6 +5,7 @@
   var adressInput = document.querySelector('[name="address"]');
   var map = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
+
   mainPin.addEventListener('mousedown', function (drugEvt) {
     drugEvt.preventDefault();
 
@@ -45,7 +46,6 @@
     var mainPinMouseupHander = function (upEvt) {
       upEvt.preventDefault();
       adressInput.value = (mainPin.offsetLeft + window.constants.WIDTH_OF_START_PIN / 2) + ',' + mainPin.offsetTop;
-
       if (!isMapActive) {
         map.classList.remove('map--faded');
         window.backend.getData(function (data) {
@@ -56,12 +56,11 @@
           window.createPopup.error();
           window.formListeners.show();
         });
-        isMapActive = true;
       }
-      window.formListeners.show();
+
       document.removeEventListener('mousemove', mainPinMousemoveHandler);
       document.removeEventListener('mouseup', mainPinMouseupHander);
-      map.addEventListener('click', window.mapCreatePopupHandler);
+      window.formListeners.show();
     };
 
     document.addEventListener('mousemove', mainPinMousemoveHandler);

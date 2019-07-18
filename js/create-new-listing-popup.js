@@ -1,19 +1,17 @@
 'use strict';
-
 (function () {
-
+  var templateListing = document.querySelector('#card').content.querySelector('.popup');
   var getTypeOnRussian = function (array, value) {
-    var element = array.filter(function (item) {
-      return item.type === value;
+    var type = array.find(function (element) {
+      return element.type === value;
     });
-    return element[0].russian;
+    return type.russian;
   };
-
-  var filterFeatures = function (dataToFilter, dataOfFeatures) {
+  var filterFeatures = function (array, values) {
     var newData = [];
-    dataOfFeatures.forEach(function (tag) {
-      for (var i = 0; i < dataToFilter.length; i++) {
-        var element = dataToFilter[i];
+    values.forEach(function (tag) {
+      for (var i = 0; i < array.length; i++) {
+        var element = array[i];
         if (element.classList.contains('popup__feature--' + tag)) {
           newData.push(element);
         }
@@ -21,13 +19,12 @@
     });
     return newData;
   };
-
-  var renderFeatures = function (dataToFilter, dataOfFeatures, container) {
-    if (dataOfFeatures.length === dataToFilter.length) {
+  var renderFeatures = function (array, values, container) {
+    if (values.length === array.length) {
       return container;
     }
-    var newFragmentOfFeatures = filterFeatures(dataToFilter, dataOfFeatures);
-    dataToFilter.forEach(function (element) {
+    var newFragmentOfFeatures = filterFeatures(array, values);
+    array.forEach(function (element) {
       element.parentNode.removeChild(element);
     });
     newFragmentOfFeatures.forEach(function (element) {
@@ -35,9 +32,7 @@
     });
     return container;
   };
-
   var renderPhotos = function (container, data, parentPopup) {
-
     data.forEach(function (src) {
       var popupPhoto = parentPopup.querySelector('.popup__photo');
       var photoTemplate = popupPhoto.cloneNode(true);
@@ -46,11 +41,21 @@
     });
     container.children[0].parentNode.removeChild(container.children[0]);
   };
-
-
+  var checkZeroValues = function (container, data1, data2) {
+    var zero = 0;
+    var zeroTime = '0:00';
+    if (data1 === zero || data2 === zero || data1 === zeroTime && data1 === zeroTime) {
+      container.textContent = '';
+    } else {
+      if (container.classList.contains('popup__text--capacity')) {
+        container.textContent = data1 + ' комнаты для ' + data2 + ' гостей.';
+      }
+      if (container.classList.contains('popup__text--time')) {
+        container.textContent = 'Заезд после ' + data1 + ', выезд до ' + data2;
+      }
+    }
+  };
   window.createNewListingPopup = function (data) {
-
-    var templateListing = document.querySelector('#card').content.querySelector('.popup');
     var newPopup = templateListing.cloneNode(true);
     var popupAvatar = newPopup.querySelector('.popup__avatar');
     var popupTitle = newPopup.querySelector('.popup__title');
@@ -63,41 +68,16 @@
     var featuresList = newPopup.querySelectorAll('.popup__feature');
     var popupDescription = newPopup.querySelector('.popup__description');
     var popupPhotosContainer = newPopup.querySelector('.popup__photos');
-    var popupClose = newPopup.querySelector('.popup__close');
-
     popupAvatar.src = data.author.avatar;
     popupTitle.textContent = data.offer.title;
     popupAddress.textContent = data.offer.address;
     popupPrice.textContent = (data.offer.price) + '₽/ночь';
-    popupType.textContent = getTypeOnRussian(window.constants.AccomodationType, data.offer.type);
-    popupCapacity.textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей.';
-    popupTime.textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+    popupType.textContent = getTypeOnRussian(window.constants.ACCOMODATION_TYPE, data.offer.type);
+    checkZeroValues(popupCapacity, data.offer.rooms, data.offer.guests);
+    checkZeroValues(popupTime, data.offer.checkin, data.offer.checkout);
     renderFeatures(featuresList, data.offer.features, popupFeaturesContainer);
-    popupDescription.textContent = data.description;
+    popupDescription.innerHTML = data.offer.description;
     renderPhotos(popupPhotosContainer, data.offer.photos, newPopup);
-
-    var popupKeydownHandler = function (evt) {
-      if (evt.keyCode === window.constants.ESC_KEYCODE) {
-        var addedPopup = document.querySelector('.popup');
-        popupClose.removeEventListener('click', buttonClosePopupHandler);
-        document.removeEventListener('keydown', popupKeydownHandler);
-
-        addedPopup.parentNode.removeChild(addedPopup);
-      }
-    };
-    var buttonClosePopupHandler = function () {
-      var addedPopup = document.querySelector('.popup');
-      popupClose.removeEventListener('click', buttonClosePopupHandler);
-      document.removeEventListener('keydown', popupKeydownHandler);
-
-      addedPopup.parentNode.removeChild(addedPopup);
-    };
-
-    popupClose.addEventListener('click', buttonClosePopupHandler);
-    document.addEventListener('keydown', popupKeydownHandler);
-
     return newPopup;
   };
-
 })();
-

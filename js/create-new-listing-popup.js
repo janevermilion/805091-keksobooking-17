@@ -10,12 +10,11 @@
   var filterFeatures = function (array, values) {
     var newData = [];
     values.forEach(function (tag) {
-      for (var i = 0; i < array.length; i++) {
-        var element = array[i];
+      array.forEach(function (element) {
         if (element.classList.contains('popup__feature--' + tag)) {
           newData.push(element);
         }
-      }
+      });
     });
     return newData;
   };

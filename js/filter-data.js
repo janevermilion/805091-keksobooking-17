@@ -13,7 +13,6 @@
     var newObject = {};
     if (newFiltersValue.value === 'any') {
       checkValues(valuesOfFilter, newFiltersValue);
-      return valuesOfFilter;
     } else {
       newObject.typeOfFilter = newFiltersValue.name;
       if (newFiltersValue.type !== 'checkbox') {
@@ -22,21 +21,12 @@
         valuesOfFilter.push(newObject);
       } else {
         newObject.value = [];
-        var isCheckboxesInFeatures = valuesOfFilter.some(function (value) {
-          return value.typeOfFilter === newFiltersValue.name;
+        var checkedCheckboxes = document.querySelectorAll('.map__checkbox:checked');
+        checkedCheckboxes.forEach(function (element) {
+          newObject.value.push(element.value);
         });
-        if (!isCheckboxesInFeatures) {
-          newObject.value.push(newFiltersValue.value);
-          valuesOfFilter.push(newObject);
-        } else {
-          newObject.value = [];
-          var checkedCheckboxes = document.querySelectorAll('.map__checkbox:checked');
-          checkedCheckboxes.forEach(function (element) {
-            newObject.value.push(element.value);
-          });
-          checkValues(valuesOfFilter, newFiltersValue);
-          valuesOfFilter.push(newObject);
-        }
+        checkValues(valuesOfFilter, newFiltersValue);
+        valuesOfFilter.push(newObject);
       }
     }
     return valuesOfFilter;
@@ -95,10 +85,10 @@
         if (filter.typeOfFilter === filterByType && element.offer.type === filter.value) {
           filterCounter += 1;
         }
-        if (filter.typeOfFilter === filterByRooms && element.offer.rooms === filter.value) {
+        if (filter.typeOfFilter === filterByRooms && element.offer.rooms === Number(filter.value)) {
           filterCounter += 1;
         }
-        if (filter.typeOfFilter === filterByGuests && element.offer.guests === filter.value) {
+        if (filter.typeOfFilter === filterByGuests && element.offer.guests === Number(filter.value)) {
           filterCounter += 1;
         }
         if (filter.typeOfFilter === filterByPrice) {
@@ -120,8 +110,6 @@
     filteredPins = checkboxChecking(filteredPins, arrayOfFilters);
     return filteredPins;
   };
-
-
   window.filterData = function (currentFilter) {
     window.pinsActions.clear();
     var arrayOfFiltersResults = createArrayOfFiltersResults(currentFilter);

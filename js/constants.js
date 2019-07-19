@@ -39,7 +39,11 @@
         'russian': 'Дворец',
         'minPrice': 10000
       }
-    ]
+    ],
+    SUCCESS_XHR_STATUS: 200,
+    FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
+    DEFAULT_USER_AVATAR: 'img/muffin-grey.svg',
+    EXAMPLE_OF_PHOTO_DESCRIPTION: 'Фотография жилья'
   };
 })();
 

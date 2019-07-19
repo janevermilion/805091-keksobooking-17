@@ -9,6 +9,15 @@
   var resetFormButton = adForm.querySelector('.ad-form__reset');
   var filterForm = document.querySelector('.map__filters');
   var filtersFormChildrenList = filtersForm.querySelectorAll('fieldset, select');
+  var avatarChooser = document.querySelector('.ad-form__field').querySelector('input[type=file]');
+  var avatarPreview = document.querySelector('.ad-form-header__preview').querySelector('img');
+  var photoListingChooser = document.querySelector('.ad-form__upload').querySelector('input[type=file]');
+  var typeOfHouse = adForm.querySelector('#type');
+  var priceForNight = adForm.querySelector('#price');
+  var checkInTime = adForm.querySelector('#timein');
+  var checkOutTime = adForm.querySelector('#timeout');
+  var roomNumber = adForm.querySelector('#room_number');
+  var guestsCapacity = adForm.querySelector('#capacity');
   var filterFormChangeHandler = function (evt) {
     var selectedFilter = evt.target;
     window.debounce(function () {
@@ -16,31 +25,28 @@
       window.pinsActions.render(filteredData);
     });
   };
-
-  adForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    window.backend.uploadData(window.createPopup.success, window.createPopup.error, new FormData(adForm));
-    window.formListeners.hide();
-  });
-  adressInput.value = (window.constants.MAP_WIDTH / 2 + window.constants.WIDTH_OF_START_PIN / 2) + ',' + (window.constants.MAP_HEIGHT / 2 + window.constants.HEIGHT_OF_START_PIN);
   var addDisableAttribute = function (data) {
     data.forEach(function (element) {
       element.disabled = true;
+      element.children.disabled = true;
     });
   };
   var deleteDisableAttribute = function (data) {
     data.forEach(function (element) {
       element.disabled = false;
+      element.children.disabled = false;
     });
   };
-  var typeOfHouse = adForm.querySelector('#type');
-  var priceForNight = adForm.querySelector('#price');
-  var checkInTime = adForm.querySelector('#timein');
-  var checkOutTime = adForm.querySelector('#timeout');
-  var roomNumber = adForm.querySelector('#room_number');
-  var guestsCapacity = adForm.querySelector('#capacity');
-  priceForNight.placeholder = window.constants.ACCOMODATION_TYPE[typeOfHouse.selectedIndex].minPrice;
-  priceForNight.min = window.constants.ACCOMODATION_TYPE[typeOfHouse.selectedIndex].minPrice;
+  var cleanPhotosOfListing = function () {
+    var data = document.querySelectorAll('.ad-form__photo');
+    data.forEach(function (element, i) {
+      if (i !== 0) {
+        element.parentNode.removeChild(element);
+      } else {
+        element.innerHTML = '';
+      }
+    });
+  };
   var typeOfHouseSelectChangeHandler = function () {
     var index = typeOfHouse.selectedIndex;
     priceForNight.placeholder = window.constants.ACCOMODATION_TYPE[index].minPrice;
@@ -78,9 +84,23 @@
   var roomNumberChangeHandler = function () {
     validateRoom(roomNumber, guestsCapacity);
   };
+  priceForNight.placeholder = window.constants.ACCOMODATION_TYPE[typeOfHouse.selectedIndex].minPrice;
+  priceForNight.min = window.constants.ACCOMODATION_TYPE[typeOfHouse.selectedIndex].minPrice;
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.uploadData(window.createPopup.success, window.createPopup.error, new FormData(adForm));
+    window.formListeners.pageDeactivateHandler();
+  });
+  adressInput.value = (window.constants.MAP_WIDTH / 2 + window.constants.WIDTH_OF_START_PIN / 2) + ',' + (window.constants.MAP_HEIGHT / 2 + window.constants.HEIGHT_OF_START_PIN);
+  addDisableAttribute(adFormFieldsetList);
   window.formListeners = {
-    hide: function () {
+    pageDeactivateHandler: function () {
+      cleanPhotosOfListing();
+      avatarChooser.removeEventListener('change', window.uploadPhoto.avatarChooserUploadHandler);
+      photoListingChooser.removeEventListener('change', window.uploadPhoto.photoListingChooserUploadHandler);
+      avatarPreview.src = window.constants.DEFAULT_USER_AVATAR;
       filterForm.removeEventListener('change', filterFormChangeHandler);
+      window.closePopupNow(map);
       map.removeEventListener('click', window.mapClickHandler);
       map.classList.add('map--faded');
       window.pinsActions.clear();
@@ -95,21 +115,22 @@
       mainPin.style.top = (window.constants.MAP_HEIGHT / 2 + window.constants.HEIGHT_OF_START_PIN / 2) + 'px';
       adForm.reset();
       adressInput.value = (window.constants.MAP_WIDTH / 2 - window.constants.WIDTH_OF_START_PIN / 2) + ',' + (window.constants.MAP_HEIGHT / 2 - window.constants.HEIGHT_OF_START_PIN / 2);
-      resetFormButton.removeEventListener('click', window.formListeners.hide);
+      resetFormButton.removeEventListener('click', window.formListeners.pageDeactivateHandler);
     },
-    show: function () {
+    pageActivateHandler: function () {
       adForm.classList.remove('ad-form--disabled');
       deleteDisableAttribute(adFormFieldsetList);
       deleteDisableAttribute(filtersFormChildrenList);
-      resetFormButton.addEventListener('click', window.formListeners.hide);
+      resetFormButton.addEventListener('click', window.formListeners.pageDeactivateHandler);
       typeOfHouse.addEventListener('change', typeOfHouseSelectChangeHandler);
       checkInTime.addEventListener('change', checkInSelectChangeHandler);
       checkOutTime.addEventListener('change', checkOutSelectChangeHandler);
       roomNumber.addEventListener('change', roomNumberChangeHandler);
       map.addEventListener('click', window.mapClickHandler);
       filterForm.addEventListener('change', filterFormChangeHandler);
+      avatarChooser.addEventListener('change', window.uploadPhoto.avatarChooserUploadHandler);
+      photoListingChooser.addEventListener('change', window.uploadPhoto.photoListingChooserUploadHandler);
       validateRoom(roomNumber, guestsCapacity);
     }
   };
-
 })();

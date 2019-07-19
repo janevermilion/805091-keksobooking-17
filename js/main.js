@@ -54,13 +54,13 @@
         },
         function () {
           window.createPopup.error();
-          window.formListeners.show();
+          window.formListeners.pageActivateHandler();
         });
       }
 
       document.removeEventListener('mousemove', mainPinMousemoveHandler);
       document.removeEventListener('mouseup', mainPinMouseupHander);
-      window.formListeners.show();
+      window.formListeners.pageActivateHandler();
     };
 
     document.addEventListener('mousemove', mainPinMousemoveHandler);

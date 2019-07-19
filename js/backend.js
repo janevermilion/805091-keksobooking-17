@@ -1,13 +1,12 @@
 'use strict';
 (function () {
 
-
   var getXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.constants.SUCCESS_XHR_STATUS) {
         onSuccess(xhr.response);
       } else {
         onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);

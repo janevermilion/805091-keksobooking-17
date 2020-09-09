@@ -49,6 +49,7 @@
       if (!isMapActive) {
         map.classList.remove('map--faded');
         window.backend.getData(function (data) {
+         console.log(data);
           window.pinsActions.setData(data);
           window.pinsActions.render(data);
         },
